@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Checkpoints & weights
+checkpoints/
+*.pt
+*.pth
+
+# Logs
+logs/
+
+# OS
+.DS_Store
+*.swp
