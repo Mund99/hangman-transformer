@@ -29,9 +29,10 @@
   align-items: start;
 }
 
-/* when right column is hidden (user mode without hint), left takes full width */
+/* user mode without hint: single centered column, not stretched full width */
 .hg-stack.user-mode-only {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 680px);
+  justify-content: center;
 }
 
 /* left column: contains board, keyboard, history */
@@ -337,8 +338,7 @@
     grid-template-columns: 1fr;
   }
   .hg-right {
-    position: static;
-    order: -1;
+    position: static;   /* stack below the game, not above it */
   }
 }
 

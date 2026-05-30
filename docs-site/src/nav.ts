@@ -11,7 +11,29 @@ export interface NavItem {
 }
 
 export const NAV: NavItem[] = [
-  { label: 'Play', path: '/' },
+  { label: 'Overview', path: '/' },
+  { label: 'Play', path: '/play' },
+  {
+    label: 'Foundations',
+    children: [
+      { label: 'The Problem & Data', path: '/docs/data' },
+      { label: 'Statistical Baselines', path: '/docs/baselines' },
+    ],
+  },
+  {
+    label: 'The Model',
+    children: [
+      { label: 'Architecture', path: '/docs/architecture' },
+      { label: 'Training: Supervised & RL', path: '/docs/training' },
+    ],
+  },
+  {
+    label: 'Results',
+    children: [
+      { label: 'Performance Analysis', path: '/docs/analysis' },
+      { label: 'Experiments & Findings', path: '/docs/experiments' },
+    ],
+  },
 ]
 
 /** Flat ordered list used for Prev / Next navigation */
