@@ -19,15 +19,15 @@ export default function Architecture() {
 
       <h2>The forward pass at a glance</h2>
       <Diagram>{`graph TD
-    T["token_ids [45]<br/>masked word"] --> TE["Token<br/>embedding"]
-    POS["positions [45]"] --> PE["Position<br/>embedding"]
-    G["guessed_vec [26]"] --> GP["Linear<br/>26 → d"]
-    TE --> SUM["+ sum"]
+    T["token_ids · 45<br/>masked word"] --> TE["Token<br/>embedding"]
+    POS["positions · 45"] --> PE["Position<br/>embedding"]
+    G["guessed_vec · 26"] --> GP["Linear<br/>26 to d"]
+    TE --> SUM["sum"]
     PE --> SUM
     GP --> SUM
-    SUM --> ENC["Transformer encoder<br/>(pre-norm, GELU)"]
-    ENC --> POOL["Masked mean pool<br/>[45, d] → [d]"]
-    POOL --> MLP["MLP head<br/>d → d → 26"]
+    SUM --> ENC["Transformer encoder<br/>pre-norm, GELU"]
+    ENC --> POOL["Masked mean pool<br/>45×d to d"]
+    POOL --> MLP["MLP head<br/>d to d to 26"]
     MLP --> OUT["26 letter logits"]`}</Diagram>
 
       <h2>Inputs: three streams, summed</h2>
@@ -81,12 +81,42 @@ x = x + FeedForward(LayerNorm(x))`}</CodeBlock>
 pooled = (h * mask).sum(1) / mask.sum(1).clamp(min=1)   # [B, d]
 logits = self.head(pooled)                              # [B, 26]`}</CodeBlock>
 
-      <Callout type="note" title="Making a guess">
-        At play time, the logits of already-guessed letters are set to −∞ and the highest
-        remaining letter is chosen — plain greedy argmax. No beam search, no sampling. Every
-        attempt to be cleverer at inference time made it worse (see{' '}
-        <Link to="/docs/experiments">Experiments</Link>).
+      <h3>Making a guess — <code>predict_letter()</code></h3>
+      <p>
+        At play time the model runs a forward pass, masks out every letter already guessed by
+        setting its logit to −∞, and returns the argmax of what remains. Plain greedy decoding,
+        wrapped in <code>@torch.no_grad()</code>.
+      </p>
+
+      <CodeBlock language="python">{`@torch.no_grad()
+def predict_letter(self, token_ids, attn_mask, guessed_vec):
+    logits = self.forward(token_ids, attn_mask, guessed_vec)  # [1, 26]
+    logits = logits.masked_fill(guessed_vec.bool(), float("-inf"))
+    return chr(int(logits.argmax()) + 97)                     # 'a'..'z'`}</CodeBlock>
+
+      <Callout type="note" title="Why no beam search or sampling">
+        Every attempt to be cleverer at inference time — beam search, sampling, candidate-pool
+        re-ranking — made it <em>worse</em> (see <Link to="/docs/experiments">Experiments</Link>).
+        The model’s own probability ranking is already the right ordering, so greedy argmax is
+        both simplest and best.
       </Callout>
+
+      <h2>Where the parameters live</h2>
+      <p>
+        Almost all of the model’s weight is in the Transformer layers; the embeddings and head are
+        tiny by comparison. The attention and feed-forward projections scale with{' '}
+        <code>d_model²</code>, which is what drives the parameter count up as the model widens.
+      </p>
+
+      <DocTable
+        headers={['Component', 'Rough share', 'Scales with']}
+        rows={[
+          ['Transformer encoder layers', '~95%', 'd_model² × n_layers'],
+          ['Token + position embeddings', '~2%', 'vocab × d_model'],
+          ['Guessed-letter projection', '<1%', '26 × d_model'],
+          ['MLP head', '~2%', 'd_model²'],
+        ]}
+      />
 
       <h2>Multi-label loss, not softmax</h2>
       <p>

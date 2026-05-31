@@ -46,6 +46,26 @@ optimizer.step()   # AdamW, cosine LR with warmup`}</CodeBlock>
         ]}
       />
 
+      <h3>The target and the loss mask</h3>
+      <p>
+        For each board, two 26-dim vectors are built. The <strong>target</strong> marks every
+        letter that appears anywhere in the word; the <strong>loss mask</strong> zeroes out letters
+        that have already been guessed, so the model is only graded on decisions it still has to
+        make.
+      </p>
+
+      <CodeBlock language="python">{`# word = "apple", guessed = {a, l, s}
+target    = [1 if letter in set(word) else 0 for letter in "a..z"]   # a,p,l,e -> 1
+loss_mask = [0 if letter in guessed     else 1 for letter in "a..z"] # a,l,s   -> 0
+# loss is computed only where loss_mask == 1 (here: p and e must be predicted)`}</CodeBlock>
+
+      <Callout type="tip" title="Why multi-label BCE, not 26-way softmax">
+        A softmax forces the model to pick <em>one</em> letter — but <code>apple</code> contains{' '}
+        <code>a, p, l, e</code> all at once. Binary cross-entropy treats each of the 26 letters as
+        an independent yes/no question, which matches the real structure: “is this letter in the
+        word?” asked 26 times in parallel.
+      </Callout>
+
       <Callout type="tip" title="The length curriculum">
         Short words (4–6 letters) are rare and hard, so they’re oversampled 4× (medium 2×) during
         training. This 4×/2× ratio is a genuine sweet spot: weaker, and short words are
@@ -86,12 +106,37 @@ optimizer.step()   # AdamW, cosine LR with warmup`}</CodeBlock>
 # KL-PPO objective — clip + stay close to the supervised prior
 loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</CodeBlock>
 
-      <Callout type="danger" title="Why RL can’t help: Hangman is a knowledge task">
-        RL learns <em>strategy</em> through experience. But optimal Hangman play is almost entirely
-        about <em>knowing English letter statistics</em> — which supervised learning already
-        captures directly and completely. There’s no strategic layer left to discover, so the KL
-        penalty that kept training stable also kept it from changing anything useful. Remove the
-        penalty and it forgets its knowledge and degrades instead.
+      <h3>How, exactly, each search failed</h3>
+      <p>
+        The failures weren’t random — each search fixed the previous one’s flaw and hit a new
+        wall, all bottoming out at the same 58–59% floor (on the d=256 model).
+      </p>
+
+      <DocTable
+        headers={['Search', 'Setup', 'Why it failed']}
+        rows={[
+          ['1', 'Shaped reward, batch advantage', 'Curriculum + 4 PPO epochs + small batch → stale, noisy updates'],
+          ['2', 'Terminal-only reward', 'Reward too sparse → gradient ≈ 0, nothing to learn from'],
+          ['3', 'Shaped reward, fixed config', 'Batch-norm advantage conflates word difficulty with action quality'],
+          ['4', 'GRPO grouped advantage', 'Auxiliary BCE loss pins the policy at a degraded equilibrium'],
+          ['5–6', 'KL-PPO (RLHF-style)', 'Validation nudged up, but never transferred to the test set'],
+        ]}
+      />
+
+      <Callout type="warning" title="The most revealing failure">
+        With batch-level advantage normalization, easy words return ≈ +8–10 and hard
+        (rare-letter) words ≈ −5 to −8. The policy “learns” that rare letters lead to bad outcomes
+        and starts <em>avoiding</em> them — so the j/k/w letter bias gets <strong>worse</strong>,
+        not better. RL optimised the policy in the wrong direction while the loss happily fell.
+      </Callout>
+
+      <Callout type="danger" title="Why RL can’t help here: it’s a knowledge task">
+        Underneath every mechanism is one fact: optimal Hangman play is about{' '}
+        <em>knowing English letter statistics</em>, which supervised learning already captures
+        directly. There’s no strategic layer left for RL to discover. The KL penalty that kept
+        training stable also kept it from changing anything useful; remove it and the model forgets
+        its knowledge and degrades. The real lever was never the RL algorithm — it was{' '}
+        <Link to="/docs/architecture">model capacity</Link>.
       </Callout>
 
       <h3>The takeaway</h3>

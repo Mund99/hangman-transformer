@@ -27,7 +27,7 @@ async function getMermaid() {
       startOnLoad: false,
       theme: 'base',
       themeVariables: THEME_VARS,
-      flowchart: { curve: 'basis', htmlLabels: false },
+      flowchart: { curve: 'basis', htmlLabels: true },
     })
     initialized = true
   }

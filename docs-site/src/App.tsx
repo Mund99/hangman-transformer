@@ -13,6 +13,8 @@ import Architecture from './pages/docs/Architecture'
 import Training from './pages/docs/Training'
 import Analysis from './pages/docs/Analysis'
 import Experiments from './pages/docs/Experiments'
+import Pipeline from './pages/docs/Pipeline'
+import Glossary from './pages/docs/Glossary'
 // ─────────────────────────────────────────────────────────
 
 
@@ -121,6 +123,8 @@ export default function App() {
             <Route path="/docs/training" element={<Training />} />
             <Route path="/docs/analysis" element={<Analysis />} />
             <Route path="/docs/experiments" element={<Experiments />} />
+            <Route path="/docs/pipeline" element={<Pipeline />} />
+            <Route path="/docs/glossary" element={<Glossary />} />
           </Routes>
         </div>
       </div>

@@ -66,8 +66,8 @@ export default function HomePage() {
       </p>
 
       <Diagram>{`graph LR
-    A["Masked word<br/>_ r e _ _"] --> E[Transformer<br/>Encoder]
-    G["Guessed letters<br/>{r, e, t}"] --> E
+    A["Masked word<br/>_ r e _ _"] --> E["Transformer<br/>Encoder"]
+    G["Guessed letters<br/>r, e, t"] --> E
     E --> P["26 letter<br/>probabilities"]
     P --> M["Guess best<br/>unguessed letter"]`}</Diagram>
 
@@ -106,20 +106,35 @@ export default function HomePage() {
         <Link to="/docs/experiments">Experiments &amp; Findings</Link> page.
       </p>
 
-      <h2>Explore</h2>
+      <h2>How to read these docs</h2>
+      <p>The pages follow the project end to end — feel free to jump to what interests you.</p>
       <DocTable
-        headers={['Page', 'What’s there']}
+        headers={['Section', 'Page', 'What’s there']}
         rows={[
-          ['Play', 'Watch the model play, or play the same words yourself'],
-          ['Experiments & Findings', 'Every run, the scaling law, and all 8 findings'],
+          ['Foundations', 'The Problem & Data', 'Game rules, the 90/5/5 corpus, how a board becomes training data'],
+          ['Foundations', 'Statistical Baselines', 'Two rule-based agents (18% & 39%) that set the bar'],
+          ['The Model', 'Architecture', 'The Transformer, encoding, inference, and the scaling law'],
+          ['The Model', 'Training: Supervised & RL', 'How it’s trained — and exactly why 6 RL attempts failed'],
+          ['Results', 'Performance Analysis', 'The best model by word length and by letter'],
+          ['Results', 'Experiments & Findings', 'Every run in order, with reasoning, plus 8 findings'],
+          ['Reference', 'Training Pipeline & Logs', 'Stages, log format, checkpoint structure'],
+          ['Reference', 'Glossary', 'Definitions for every term used'],
+          ['Try it', 'Play', 'Watch the model play, or play the same words yourself'],
         ]}
       />
 
-      <Callout type="note" title="Reproducibility">
-        Training code, data splits, and evaluation scripts live in the{' '}
-        <a href="https://github.com/Mund99/hangman-transformer" target="_blank" rel="noreferrer">GitHub repo</a>.
-        The in-browser demo uses an int8-quantised export of the d=512 model (18.8 MB,
-        identical win rate to full precision).
+      <Callout type="tip" title="Short on time?">
+        Read the <Link to="/docs/experiments">Experiments &amp; Findings</Link> page and try{' '}
+        <Link to="/play">Play</Link> — together they tell the whole story: what worked, what
+        didn’t, and how it feels.
+      </Callout>
+
+      <Callout type="note" title="What’s in the repo">
+        The{' '}
+        <a href="https://github.com/Mund99/hangman-transformer" target="_blank" rel="noreferrer">GitHub repo</a>{' '}
+        ships the data splits and the runnable statistical baselines; the training pipeline is
+        documented under <Link to="/docs/pipeline">Reference</Link>. The in-browser demo runs an
+        int8-quantised export of the d=512 model (18.8 MB — identical win rate to full precision).
       </Callout>
     </DocLayout>
   )

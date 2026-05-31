@@ -21,9 +21,9 @@ export default function Data() {
       <Diagram>{`graph LR
     A["_ _ _ _ _ _"] -->|guess e| B["_ _ _ _ e _"]
     B -->|guess r| C["_ _ _ _ e r"]
-    C -->|guess a ✗| D["_ _ _ _ e r<br/>1 wrong"]
+    C -->|"guess a (miss)"| D["_ _ _ _ e r<br/>1 wrong"]
     D -->|guess o| E["_ o _ _ e r"]
-    E -->|...| F["solved or lost"]`}</Diagram>
+    E --> F["solved or lost"]`}</Diagram>
 
       <Callout type="info" title="Why it’s a real machine-learning problem">
         The test words are <strong>disjoint</strong> from the training words. You cannot memorise

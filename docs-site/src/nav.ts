@@ -34,6 +34,13 @@ export const NAV: NavItem[] = [
       { label: 'Experiments & Findings', path: '/docs/experiments' },
     ],
   },
+  {
+    label: 'Reference',
+    children: [
+      { label: 'Training Pipeline & Logs', path: '/docs/pipeline' },
+      { label: 'Glossary', path: '/docs/glossary' },
+    ],
+  },
 ]
 
 /** Flat ordered list used for Prev / Next navigation */
