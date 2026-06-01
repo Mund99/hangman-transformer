@@ -1,0 +1,43 @@
+[11:49:36] ═══════════════════════════════════════════════════════
+[11:49:36]   Supervised search4 run: 20260518_1149
+[11:49:36]   Dataset: 353k words (NLTK + competition, max_len=45)
+[11:49:36]   All experiments: curriculum(4×/2×), no early-game bias
+[11:49:36]   exp_j: 200k steps  (new-data baseline)
+[11:49:36]   exp_k: 250k steps
+[11:49:36]   exp_l: 300k steps
+[11:49:36]   prev best: exp_i 200k(4×/2×) → val=65.35%  test=68.12%  [251k dataset]
+[11:49:36] ═══════════════════════════════════════════════════════
+[11:49:36] 
+[11:49:36] ▶ Starting exp_j_200k_curr_4x2x  (steps=200000)
+[14:24:27] ✓ Training done: exp_j_200k_curr_4x2x
+[14:24:27]   best val: 62.05%
+[14:24:27]   Running test evaluation…
+[14:24:33]   test win-rate: 64.29%
+[14:24:33] 
+[14:24:33] ▶ Starting exp_k_250k_curr_4x2x  (steps=250000)
+[17:11:08] ✓ Training done: exp_k_250k_curr_4x2x
+[17:11:08]   best val: 63.05%
+[17:11:08]   Running test evaluation…
+[17:11:14]   test win-rate: 66.20%
+[17:11:14] 
+[17:11:14] ▶ Starting exp_l_300k_curr_4x2x  (steps=300000)
+[20:41:16] ✓ Training done: exp_l_300k_curr_4x2x
+[20:41:16]   best val: 64.65%
+[20:41:16]   Running test evaluation…
+[eval_done]   test win-rate: 66.05%
+
+[eval_done] 
+[eval_done] ═══════════════════════════════════════════════════════
+[eval_done]   SEARCH4 COMPLETE — 20260518_1149
+[eval_done]   Note: test set is larger (17,652 vs 12,574) — scores not directly comparable
+[eval_done] ═══════════════════════════════════════════════════════
+[eval_done]   experiment                    val%       test%
+[eval_done]   ──────────────────────────────────────────────────────
+[eval_done]   [prev] exp_i 200k(4×/2×)      65.35%     68.12%  [251k dataset]
+[eval_done]   exp_j  200k curr(4×/2×)        62.05%     64.29%
+[eval_done]   exp_k  250k curr(4×/2×)        63.05%     66.20%
+[eval_done]   exp_l  300k curr(4×/2×)        64.65%     66.05%
+[eval_done]   ──────────────────────────────────────────────────────
+[eval_done]   best: exp_k 250k → 66.20% test  (plateau after 250k)
+[eval_done]   target: ≥70% test win-rate  [not yet reached]
+[eval_done] ═══════════════════════════════════════════════════════

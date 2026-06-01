@@ -1,0 +1,31 @@
+[02:21:32] train_short46.txt: 48906 words
+[02:21:32] ═══════════════════════════════════════════════════════════════════
+[02:21:32]   Supervised Search 7 — Dedicated Short-Word Model: 20260528_0221
+[02:21:32]   Baseline: sup5_b  d=512 L=6  19.2M  test=68.79%
+[02:21:32]   Problem:  short words (4–6 letters) stuck at 13/22/31%
+[02:21:32]   Fix:      dedicated model trained ONLY on 4–6 letter words
+[02:21:32]   ─────────────────────────────────────────────────────────────────
+[02:21:32]   sw_a: d=256 L=4  3.25M   150k steps  lr=3e-4  (fast baseline)
+[02:21:32]   sw_b: d=384 L=6  10.8M   120k steps  lr=2e-4  (more capacity)
+[02:21:32]   ensemble: sw_best (len≤6) + sup5_b (len>6)
+[02:21:32]   target:   short words > 45%  ensemble overall > 70%
+[02:21:32]   est. runtime: ~3h + ~5h = ~8h total
+[02:21:32] ═══════════════════════════════════════════════════════════════════
+[02:21:32] 
+[02:21:32] ▶ Starting sw_a_d256_L4
+[04:21:45] ✓ Training done: sw_a_d256_L4
+[04:21:45]   best val: 21.90%
+[04:21:45]   Evaluating short model on short test words (len 4–6) …
+[04:21:47]   ★ short-word win-rate (model alone): 21.79%
+[04:21:47] 
+[04:21:47] ▶ Starting sw_b_d384_L6
+[08:05:32] ✓ Training done: sw_b_d384_L6
+[08:05:32]   best val: 23.54%
+[08:05:32]   Evaluating short model on short test words (len 4–6) …
+[08:05:34]   ★ short-word win-rate (model alone): 19.74%
+[08:05:34] 
+[08:05:34] ═══════════════════════════════════════════════════════════════════
+[08:05:34]   ENSEMBLE EVALUATION — sw_best + sup5_b
+[08:05:34] ═══════════════════════════════════════════════════════════════════
+[08:05:34] 
+[08:05:34]   Ensemble: sw_a_d256_L4 + sup5_b  split=len6 …

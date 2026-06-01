@@ -1,0 +1,17 @@
+[21:10:52] ═══════════════════════════════════════════════════════
+[21:10:52]   RL search2 run: 20260519_2110
+[21:10:52]   Init: exp_k 250k (search4) → test=66.20%  val=63.05%
+[21:10:52]   All fixes applied vs search1:
+[21:10:52]     1. No curriculum  (natural word distribution)
+[21:10:52]     2. ppo-epochs=1   (fresh importance ratios)
+[21:10:52]     3. games=1024     (4× larger batch, lower variance)
+[21:10:52]     4. lr=3e-6        (conservative, protect supervised)
+[21:10:52]     5. terminal-reward (+1/-1 win/loss only)
+[21:10:52]   exp_rl2_a: aux=0.20  6k steps  (all-fixes baseline)
+[21:10:52]   exp_rl2_b: aux=0.05  6k steps  (weaker anchor, more RL)
+[21:10:52]   exp_rl2_c: aux=0.40  6k steps  (stronger anchor, safer)
+[21:10:52]   target: ≥70% test win-rate
+[21:10:52]   abort: if exp_rl2_a val < 62% at step 500
+[21:10:52] ═══════════════════════════════════════════════════════
+[21:10:52] 
+[21:10:52] ▶ Starting exp_rl2_a_baseline  (lr=3e-6  aux=0.20  steps=6000)

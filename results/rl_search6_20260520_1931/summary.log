@@ -1,0 +1,38 @@
+[19:31:32] ═══════════════════════════════════════════════════════════════
+[19:31:32]   RL Search 6 — stronger KL + larger val eval: 20260520_1931
+[19:31:32]   Init: ft_b step-6k  val=63.15%  test=66.32%
+[19:31:32]   Fix:  kl_coef 1.0–3.0 (dominates PPO)  val-subset=5000
+[19:31:32]   ─────────────────────────────────────────────────────────────
+[19:31:32]   rl6_a: kl=1.0  terminal  GRPO K=4  10k steps
+[19:31:32]   rl6_b: kl=3.0  terminal  GRPO K=4  10k steps
+[19:31:32]   rl6_c: kl=1.0  proportional  GRPO K=4  10k steps
+[19:31:32]   gate:  val@1000 < 63.0% → skip
+[19:31:32]   target: test > 66.32%  (beat supervised init)
+[19:31:32] ═══════════════════════════════════════════════════════════════
+[19:31:32] 
+[19:31:32] ▶ Starting rl6_a_kl1.0_terminal
+[22:00:23] ✓ Training done: rl6_a_kl1.0_terminal
+[22:00:23]   val@1000: 66.16%
+[22:00:23]   final val: 66.46%
+[22:00:23]   Evaluating all saved checkpoints on test set…
+[22:00:28]     rl_best.pt: test=66.19%
+[22:00:34]     rl_step10000.pt: test=66.09%
+[22:00:40]     rl_step2500.pt: test=66.14%
+[22:00:45]     rl_step5000.pt: test=66.10%
+[22:00:51]     rl_step7500.pt: test=66.08%
+[22:00:51]   best test: 66.19%  (logs/rl_search6_20260520_1931/rl6_a_kl1.0_terminal/checkpoints/rl_best.pt)
+[22:00:51]   ★ New overall best: test=66.19%
+[22:00:51] 
+[22:00:51] ▶ Starting rl6_b_kl3.0_terminal
+[00:29:46] ✓ Training done: rl6_b_kl3.0_terminal
+[00:29:46]   val@1000: 66.28%
+[00:29:46]   final val: 66.24%
+[00:29:46]   Evaluating all saved checkpoints on test set…
+[00:29:52]     rl_best.pt: test=66.03%
+[00:29:57]     rl_step10000.pt: test=65.84%
+[00:30:03]     rl_step2500.pt: test=66.11%
+[00:30:09]     rl_step5000.pt: test=66.04%
+[00:30:14]     rl_step7500.pt: test=66.05%
+[00:30:14]   best test: 66.11%  (logs/rl_search6_20260520_1931/rl6_b_kl3.0_terminal/checkpoints/rl_step2500.pt)
+[00:30:14] 
+[00:30:14] ▶ Starting rl6_c_kl1.0_proportional

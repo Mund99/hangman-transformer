@@ -1,0 +1,33 @@
+[01:16:45] train_clean1 already exists: 317494 words
+[01:16:45] ═══════════════════════════════════════════════════════════════════
+[01:16:45]   Supervised Search 5 — Architecture scale-up: 20260521_0116
+[01:16:45]   Baseline: exp_k  d=256 L=4  train_ori  250k steps  test=66.20%
+[01:16:45]   Data: train_clean1 (317k → 314k, garbage removed)
+[01:16:45]   ─────────────────────────────────────────────────────────────────
+[01:16:45]   sup5_a: d=384 L=6 H=6 ff=1536  ~10.8M params  250k steps  lr=2e-4
+[01:16:45]   sup5_b: d=512 L=6 H=8 ff=2048  ~19.2M params  200k steps  lr=1e-4
+[01:16:45]   target: test > 66.20%  (beat exp_k baseline)
+[01:16:45]   est. runtime: ~9 hrs + ~13 hrs = ~22 hrs total
+[01:16:45] ═══════════════════════════════════════════════════════════════════
+[01:16:45] 
+[01:16:45] ▶ Starting sup5_a_d384_L6
+[09:07:34] 
+[09:07:34] ▶ Starting sup5_b_d512_L6
+[18:19:25] ✓ Training done: sup5_b_d512_L6
+[18:19:25]   best val: 69.80%
+[18:19:25]   Evaluating on test set…
+[18:19:43]   test win-rate: eval failed
+[18:19:43]   Evaluating all saved checkpoints…
+[18:20:01]     supervised_best.pt: test=54.3%
+[18:20:20]     supervised_step100000.pt: test=55.1%
+[18:20:38]     supervised_step150000.pt: test=53.8%
+[18:20:56]     supervised_step200000.pt: test=54.8%
+[18:21:15]     supervised_step50000.pt: test=49.1%
+[18:21:15]   ★ Best test: 55.1%  (logs/sup_search5_20260521_0116/sup5_b_d512_L6/checkpoints/supervised_step100000.pt)
+[18:21:15] 
+[18:21:15] ═══════════════════════════════════════════════════════════════════
+[18:21:15]   SUP SEARCH 5 COMPLETE — 20260521_0116
+[18:21:15] ═══════════════════════════════════════════════════════════════════
+[18:21:15]   baseline: exp_k  d=256 L=4  train_ori  250k → test=66.20%
+[18:21:15]   Results in: logs/sup_search5_20260521_0116/
+[18:21:15] ═══════════════════════════════════════════════════════════════════

@@ -1,0 +1,50 @@
+[14:16:05] ═══════════════════════════════════════════════════════════════
+[14:16:05]   RL Search 5 — KL-penalised PPO: 20260520_1416
+[14:16:05]   Init: ft_b step-6k  val=63.15%  test=66.32%
+[14:16:05]   Fix:  KL(π_θ || π_ref) replaces aux BCE
+[14:16:05]   ─────────────────────────────────────────────────────────────
+[14:16:05]   rl5_a: kl_coef=0.03  GRPO K=4  terminal  curriculum
+[14:16:05]   rl5_b: kl_coef=0.10  GRPO K=4  terminal  curriculum
+[14:16:05]   rl5_c: kl_coef=0.30  GRPO K=4  terminal  curriculum
+[14:16:05]   gate:  val < 62.5% at step 500 → skip
+[14:16:05]   target: val > 63.15%  (improve on supervised init)
+[14:16:05] ═══════════════════════════════════════════════════════════════
+[14:16:05] 
+[14:16:05] ▶ Starting rl5_a_kl0.03
+[15:30:32] ✓ Training done: rl5_a_kl0.03
+[15:30:32]   val@500: 65.13%
+[15:30:32]   best val: 64.20%
+[15:30:38]   test win-rate: 66.17%
+[15:30:38]   ★ New overall best: val=65.13%  ckpt=logs/rl_search5_20260520_1416/rl5_a_kl0.03/checkpoints/rl_best.pt
+[15:30:38] 
+[15:30:38] ▶ Starting rl5_b_kl0.10
+[16:44:55] ✓ Training done: rl5_b_kl0.10
+[16:44:55]   val@500: 65.00%
+[16:44:55]   best val: 64.53%
+[16:45:01]   test win-rate: 66.22%
+[16:45:01] 
+[16:45:01] ▶ Starting rl5_c_kl0.30
+[17:59:14] ✓ Training done: rl5_c_kl0.30
+[17:59:14]   val@500: 65.00%
+[17:59:14]   best val: 65.40%
+[17:59:20]   test win-rate: 66.11%
+[17:59:20]   ★ New overall best: val=65.40%  ckpt=logs/rl_search5_20260520_1416/rl5_c_kl0.30/checkpoints/rl_best.pt
+[17:59:20] 
+[17:59:20] ═══════════════════════════════════════════════════════════════
+[17:59:20]   RL SEARCH 5 COMPLETE — 20260520_1416
+[17:59:20] ═══════════════════════════════════════════════════════════════
+[17:59:20]   supervised init (ft_b)    val=63.15%  test=66.32%
+[17:59:20]   ─────────────────────────────────────────────────────────────
+[17:59:20]   experiment          val@500   final_val%   test%
+[17:59:20]   ─────────────────────────────────────────────────────────────
+[17:59:20]   rl5_a kl=0.03       65.13%    64.20%       66.17%
+[17:59:20]   rl5_b kl=0.10       65.00%    64.53%       66.22%
+[17:59:20]   rl5_c kl=0.30       65.00%    65.40%       66.11%
+[17:59:20]   ─────────────────────────────────────────────────────────────
+[17:59:20]   target: test > 66.32%
+[17:59:20]   best ckpt: logs/rl_search5_20260520_1416/rl5_c_kl0.30/checkpoints/rl_best.pt
+[17:59:20]   next: if test > 66.32% → stronger kl_coef sweep / more steps
+[17:59:20]         if val@500 < 62.5% → forgetting; try kl_coef × 3
+[17:59:20]         if val@500 stable but no test gain → reward design issue
+[17:59:20] ═══════════════════════════════════════════════════════════════
+[17:59:20]   Results in: logs/rl_search5_20260520_1416/

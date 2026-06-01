@@ -1,0 +1,25 @@
+[11:57:19] ═══════════════════════════════════════════════════════════════════
+[11:57:19]   Supervised Search 6 — Short-Word Focus: 20260522_1157
+[11:57:19]   Baseline: sup5_b  d=512 L=6  19.2M params  200k steps  test=68.79%
+[11:57:19]   Problem:  short words (4–6 letters) stuck at 13/22/31% across all models
+[11:57:19]   Fix:      raise curriculum from 4×/2× to 16×/4×
+[11:57:19]   ─────────────────────────────────────────────────────────────────
+[11:57:19]   sup6_a: FINE-TUNE sup5_b  16×/4× curriculum  lr=5e-5   100k steps
+[11:57:19]   sup6_b: FRESH d=512       16×/4× curriculum  lr=1e-4   250k steps
+[11:57:19]   target: short words > 40%  overall test > 70%
+[11:57:19]   est. runtime: ~4 hrs + ~11 hrs = ~15 hrs total
+[11:57:19] ═══════════════════════════════════════════════════════════════════
+[11:57:19] 
+[11:57:19] ▶ Starting sup6_a_finetune_16x4x
+[16:32:33]   ✗ No checkpoint saved — training did not improve val
+[16:32:33] ▶ Starting sup6_b_fresh_16x4x
+[04:02:46] ✓ Training done: sup6_b_fresh_16x4x
+[04:02:46]   best val: 67.02%
+[04:02:46]   Evaluating best checkpoint on test set…
+[04:03:05]   ★ test win-rate: 65.78%
+[04:03:05] 
+[04:03:05] ═══════════════════════════════════════════════════════════════════
+[04:03:05]   SUP SEARCH 6 COMPLETE — 20260522_1157
+[04:03:05]   baseline: sup5_b  d=512 L=6  19.2M  200k → test=68.79%
+[04:03:05]   Results in: logs/sup_search6_20260522_1157/
+[04:03:05] ═══════════════════════════════════════════════════════════════════

@@ -12,10 +12,18 @@ export default function Pipeline() {
 
       <p>
         How a model goes from a word list to a 69% checkpoint: the training stages, what the logs
-        look like and how to read them, and what ends up saved in a checkpoint. This documents the
-        process — the <Link to="/docs/baselines">statistical baselines</Link> are the part you can
-        run directly from this repo today.
+        look like and how to read them, and what ends up saved in a checkpoint. The full training
+        code, run configs, and curated result logs are all in the{' '}
+        <a href="https://github.com/Mund99/hangman-transformer" target="_blank" rel="noreferrer">repository</a>.
       </p>
+
+      <h2>Repository layout</h2>
+      <CodeBlock language="text">{`hangman/     core package — model, dataset, env, vocab, eval
+scripts/     train_supervised.py, train_rl.py, evaluate.py, run_*.sh configs
+baselines/   standalone statistical baselines (numpy only)
+data/        word lists — 90/5/5 train / val / test
+results/     curated result logs (summary + per-model test evals)
+docs-site/   this documentation site`}</CodeBlock>
 
       <h2>The stages</h2>
       <Diagram>{`graph LR

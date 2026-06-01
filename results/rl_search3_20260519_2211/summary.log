@@ -1,0 +1,55 @@
+[22:11:46] ═══════════════════════════════════════════════════════════════
+[22:11:46]   RL search3 run: 20260519_2211
+[22:11:46]   Init: exp_k 250k (search4) → test=66.20%  val=63.05%
+[22:11:46]   Hypothesis: shaped reward + search2 config = the untried combo
+[22:11:46]   Search1 had shaped reward BUT: curriculum+4epochs+256games→noisy
+[22:11:46]   Search2 fixed config BUT: terminal reward→credit assignment fail
+[22:11:46]   ─────────────────────────────────────────────────────────────
+[22:11:46]   Fixed across all: no-curriculum, ppo_epochs=1, games=512, mb=256
+[22:11:46]   ─────────────────────────────────────────────────────────────
+[22:11:46]   exp_rl3_a: shaped  lr=3e-6  aux=0.10  (anchor — untried combo)  6k steps
+[22:11:46]   exp_rl3_e: shaped  targeted lr=3e-6 aux=0.10 (20% j/k/w/z)   6k steps
+[22:11:46]   exp_rl3_f: proportional reward lr=3e-6 aux=0.10               6k steps
+[22:11:46]   target: val > 63.05% (supervised init) → rl_best.pt saved
+[22:11:46] ═══════════════════════════════════════════════════════════════
+[22:11:46] 
+[22:11:46] ▶ Starting exp_rl3_a_shaped_anchor
+[23:31:05] ✓ Training done: exp_rl3_a_shaped_anchor
+[23:31:05]   best val: 58.50%  (RL did not improve over supervised init)
+[23:31:05]   No rl_best.pt — evaluating supervised init for comparison
+[23:31:05]   Running test evaluation…
+[23:31:10]   test win-rate: 66.20%
+[23:31:10]   ⚠ WARNING: step-500 val=58.65% < 62%
+[23:31:10]   ⚠ Shaped reward may also be failing. Continuing remaining experiments
+[23:31:10]   ⚠ for data, but consider killing and redesigning RL approach.
+[23:31:10] 
+[23:31:10] ▶ Starting exp_rl3_e_shaped_targeted
+[00:58:35] ✓ Training done: exp_rl3_e_shaped_targeted
+[00:58:35]   best val: 59.00%  (RL did not improve over supervised init)
+[00:58:35]   No rl_best.pt — evaluating supervised init for comparison
+[00:58:35]   Running test evaluation…
+[00:58:40]   test win-rate: 66.20%
+[00:58:40] 
+[00:58:40] ▶ Starting exp_rl3_f_proportional
+[02:18:45] ✓ Training done: exp_rl3_f_proportional
+[02:18:45]   best val: 58.15%  (RL did not improve over supervised init)
+[02:18:45]   No rl_best.pt — evaluating supervised init for comparison
+[02:18:45]   Running test evaluation…
+[02:18:50]   test win-rate: 66.20%
+[02:18:50] 
+[02:18:50] ═══════════════════════════════════════════════════════════════
+[02:18:50]   RL SEARCH3 COMPLETE — 20260519_2211
+[02:18:50] ═══════════════════════════════════════════════════════════════
+[02:18:50]   supervised init (exp_k)                 val=63.05%  test=66.20%
+[02:18:50]   ─────────────────────────────────────────────────────────────
+[02:18:50]   experiment                              val%        test%
+[02:18:50]   ─────────────────────────────────────────────────────────────
+[02:18:50]   exp_rl3_a shaped lr=3e-6  aux=0.10     58.50%      66.20%
+[02:18:50]   exp_rl3_e shaped targeted lr=3e-6      59.00%      66.20%
+[02:18:50]   exp_rl3_f proportional    lr=3e-6      58.15%      66.20%
+[02:18:50]   ─────────────────────────────────────────────────────────────
+[02:18:50]   target: ≥70% test win-rate
+[02:18:50]   next: if (a) succeeds → search4 lr/aux sweep
+[02:18:50]         if all fail    → add value head + GRPO (search4)
+[02:18:50] ═══════════════════════════════════════════════════════════════
+[02:18:50]   Results in: logs/rl_search3_20260519_2211/

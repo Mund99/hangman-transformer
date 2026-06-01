@@ -1,0 +1,38 @@
+[12:28:52] ═══════════════════════════════════════════════════════════════
+[12:28:52]   Supervised fine-tune run: 20260520_1228
+[12:28:52]   Init: exp_k 250k → val=63.05%  test=66.20%
+[12:28:52]   Goal: fix j/k/w/z letter bias via targeted oversampling
+[12:28:52]   ─────────────────────────────────────────────────────────────
+[12:28:52]   ft_a: rare-letter-weight=5  + curriculum  lr=1e-5  30k steps
+[12:28:52]   ft_b: rare-letter-weight=10 + curriculum  lr=1e-5  30k steps
+[12:28:52]   target: test > 66.20%  (improve on supervised init)
+[12:28:52] ═══════════════════════════════════════════════════════════════
+[12:28:52] 
+[12:28:52] ▶ Starting ft_a_letter_w5_curriculum
+[12:53:11] ✓ Training done: ft_a_letter_w5_curriculum
+[12:53:11]   best val: 62.10%
+[12:53:11]   Running test evaluation…
+[12:53:11]   No improvement over init — evaluating supervised init for comparison
+[12:53:16]   test win-rate: 66.20%
+[12:53:16] 
+[12:53:16] ▶ Starting ft_b_letter_w10_curriculum
+[13:17:36] ✓ Training done: ft_b_letter_w10_curriculum
+[13:17:36]   best val: 62.15%
+[13:17:36]   Running test evaluation…
+[13:17:42]   test win-rate: 66.32%
+[13:17:42] 
+[13:17:42] ═══════════════════════════════════════════════════════════════
+[13:17:42]   SUP FINETUNE COMPLETE — 20260520_1228
+[13:17:42] ═══════════════════════════════════════════════════════════════
+[13:17:42]   supervised init (exp_k)             val=63.05%  test=66.20%
+[13:17:42]   ─────────────────────────────────────────────────────────────
+[13:17:42]   experiment                          val%        test%
+[13:17:42]   ─────────────────────────────────────────────────────────────
+[13:17:42]   ft_a letter-w=5  + curriculum        62.10%      66.20%
+[13:17:42]   ft_b letter-w=10 + curriculum       62.15%      66.32%
+[13:17:42]   ─────────────────────────────────────────────────────────────
+[13:17:42]   target: test > 66.20%
+[13:17:42]   next: if improved → try RL (KL-PPO) on top of best ft ckpt
+[13:17:42]         if regressed → rare_weight too high, try 5.0
+[13:17:42] ═══════════════════════════════════════════════════════════════
+[13:17:42]   Results in: logs/sup_finetune_20260520_1228/
