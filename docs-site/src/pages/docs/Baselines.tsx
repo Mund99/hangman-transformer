@@ -22,7 +22,6 @@ export default function Baselines() {
         rows={[
           ['CandidateFrequency', '18.05%', '5.58'],
           ['NGramGlobal', '39.39%', '4.99'],
-          ['Transformer (best)', '69.02%', '—'],
         ]}
       />
 
@@ -53,10 +52,25 @@ export default function Baselines() {
     # no candidates left -> global letter frequency
     return next(l for l in self.fallback if l not in guessed)`}</CodeBlock>
 
+      <Callout type="tip" title="Worked example — board “_ _ a _ _”">
+        The secret is a 5-letter word with only <code>a</code> revealed (in the middle), no wrong
+        guesses yet.
+        <ol>
+          <li><strong>Filter</strong> the training dictionary to 5-letter words with <code>a</code>{' '}
+            in position 3: <code>reach, teach, beach, peace, leach, …</code></li>
+          <li><strong>Count</strong> every letter sitting in a still-blank position across those
+            survivors.</li>
+          <li><code>e</code> and <code>c</code> show up the most → <strong>guess <code>e</code></strong>{' '}
+            (the most frequent).</li>
+        </ol>
+        If <code>e</code> turns out to be wrong, that whole branch of candidates is dropped and the
+        survivor set shrinks again next turn.
+      </Callout>
+
       <p>
-        It collapses on short words: a 4-letter word matches few dictionary entries, and a single
-        wrong guess can wipe out the whole candidate set — after which it’s just blind frequency
-        guessing.
+        This is also <em>why</em> it collapses on short words: a 4-letter word matches very few
+        dictionary entries, and a single wrong guess can wipe out the entire candidate set — after
+        which it’s just blind global-frequency guessing.
       </p>
 
       <h2>2 · NGramGlobal</h2>
@@ -75,6 +89,23 @@ export default function Baselines() {
             for gram in grams:
                 acc[gram[blank]] += gram.count * weight
 return argmax(acc, excluding=guessed)`}</CodeBlock>
+
+      <Callout type="tip" title="Worked example — same board “_ _ a _ _”">
+        Instead of matching whole words, it slides windows over the pattern and lets corpus
+        statistics vote:
+        <ul>
+          <li>Window <code>_ a</code> asks: across all bigrams ending in <code>a</code>, which
+            letter most often comes before it? → <code>e</code> (“ea”), <code>r</code> (“ra”)…</li>
+          <li>Window <code>a _</code> asks: which letter most often follows <code>a</code>?
+            → <code>n</code>, <code>t</code>, <code>c</code>…</li>
+          <li>Every window votes for the letters that could fill its blanks, weighted by how common
+            that n-gram is and by window length (<code>n³</code>). Sum the votes, guess the top
+            letter.</li>
+        </ul>
+        The key difference from CandidateFrequency: it <strong>never needs a full matching word</strong>.
+        Even an unusual pattern still gets scored from its sub-word pieces — which is why it keeps
+        working when the dictionary filter has run out of candidates.
+      </Callout>
 
       <Callout type="tip" title="Why NGram more than doubles CandidateFrequency">
         Positional n-grams capture spelling structure — common prefixes, suffixes, and letter

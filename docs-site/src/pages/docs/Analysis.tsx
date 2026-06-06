@@ -11,15 +11,46 @@ export default function Analysis() {
       </div>
 
       <p>
-        How the best model (d=768, 43.2M params) actually performs on the held-out test set,
-        broken down by word length and by letter. The single number — 69.02% — hides two very
-        different stories: the model is near-perfect on long words and intrinsically limited on
-        short ones.
+        With the model <Link to="/docs/training">trained</Link> and scaled to its best
+        configuration (d=768, 43.2M params), the question becomes: how well does it actually play?
+        This page breaks its performance on the held-out test set down by word length and by
+        letter. The single number — 69.02% — hides two very different stories: the model is
+        near-perfect on long words and intrinsically limited on short ones.
       </p>
 
       <Callout type="info" title="Headline numbers">
         <strong>69.02%</strong> win rate · 12,183 of 17,652 games won · greedy argmax decoding on
         words the model never saw in training.
+      </Callout>
+
+      <h2>What one game looks like</h2>
+      <p>
+        Before the aggregate numbers, here’s the model actually playing a real game — the secret
+        word is <strong>basket</strong>. “Confidence” is how sure the model is of the letter it
+        picks; watch it climb as the pattern fills in.
+      </p>
+
+      <DocTable
+        headers={['Board', 'Guess', 'Confidence', 'Result']}
+        rows={[
+          ['_ _ _ _ _ _', 'e', '15%', '✓ hit'],
+          ['_ _ _ _ e _', 'r', '16%', '✗ miss'],
+          ['_ _ _ _ e _', 'd', '11%', '✗ miss'],
+          ['_ _ _ _ e _', 's', '11%', '✓ hit'],
+          ['_ _ s _ e _', 't', '21%', '✓ hit'],
+          ['_ _ s _ e t', 'k', '30%', '✓ hit'],
+          ['_ _ s k e t', 'a', '29%', '✓ hit'],
+          ['_ a s k e t', 'b', '52%', '✓ solved → BASKET'],
+        ]}
+      />
+
+      <Callout type="tip" title="What to notice">
+        It opens with <code>e</code> — the most common English letter — then makes two reasonable
+        misses (<code>r</code>, <code>d</code>) before the revealed letters start constraining
+        things. Early guesses are low-confidence (~15%) because many letters are still plausible;
+        as the board fills in, the model homes in fast — by the last blank it’s far more certain
+        (<code>b</code> at 52%). Won in 8 guesses with 2 wrong, comfortably inside the 6-mistake
+        budget. (Try your own words on the <Link to="/play">Play</Link> page.)
       </Callout>
 
       <h2>Win rate by word length</h2>

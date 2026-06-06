@@ -8,6 +8,42 @@ ort.env.wasm.wasmPaths = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.26.0/di
 // Asset base (respects Vite base path on GitHub Pages)
 const BASE = import.meta.env.BASE_URL
 
+// ── Module-level model cache ────────────────────────────────────────────────
+// Loaded once per page session and reused across Play mount/unmount, so
+// navigating away and back doesn't re-download or re-init the ONNX runtime.
+type LoadedModel = { session: ort.InferenceSession; words: string[] }
+let _model: LoadedModel | null = null
+let _modelPromise: Promise<LoadedModel> | null = null
+
+function loadModel(onProgress?: (pct: number) => void): Promise<LoadedModel> {
+  if (_model) return Promise.resolve(_model)
+  if (!_modelPromise) {
+    _modelPromise = (async () => {
+      const resp = await fetch(`${BASE}hangman.onnx`)
+      const total = Number(resp.headers.get('content-length')) || 19_000_000
+      const reader = resp.body!.getReader()
+      const chunks: Uint8Array[] = []
+      let received = 0
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        chunks.push(value)
+        received += value.length
+        onProgress?.(Math.min(99, Math.round((received / total) * 100)))
+      }
+      const buf = new Uint8Array(received)
+      let off = 0
+      for (const c of chunks) { buf.set(c, off); off += c.length }
+      const session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] })
+      const txt = await fetch(`${BASE}words.txt`).then(r => r.text())
+      _model = { session, words: txt.trim().split('\n').filter(Boolean) }
+      return _model
+    })()
+    _modelPromise.catch(() => { _modelPromise = null }) // allow retry on failure
+  }
+  return _modelPromise
+}
+
 // ── Vocab / encoding ────────────────────────────────────────────────────────
 const MAX_LEN = 45
 const charToToken = (c: string) => (c === '_' ? 1 : c.charCodeAt(0) - 97 + 2)
@@ -132,37 +168,24 @@ export default function Play() {
 
   useEffect(() => { gameRef.current = game }, [game])
 
-  // ── Load model (with download progress) + words ──
+  // ── Load model + words (cached at module level — instant on revisit) ──
   useEffect(() => {
     let cancelled = false
-    async function load() {
-      try {
-        const resp = await fetch(`${BASE}hangman.onnx`)
-        const total = Number(resp.headers.get('content-length')) || 19_000_000
-        const reader = resp.body!.getReader()
-        const chunks: Uint8Array[] = []
-        let received = 0
-        for (;;) {
-          const { done, value } = await reader.read()
-          if (done) break
-          chunks.push(value)
-          received += value.length
-          if (!cancelled) setProgress(Math.min(99, Math.round((received / total) * 100)))
-        }
-        const buf = new Uint8Array(received)
-        let off = 0
-        for (const c of chunks) { buf.set(c, off); off += c.length }
-        const session = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'] })
-        const txt = await fetch(`${BASE}words.txt`).then(r => r.text())
-        if (cancelled) return
-        sessRef.current = session
-        setWords(txt.trim().split('\n').filter(Boolean))
-        setStatus('ready')
-      } catch {
-        if (!cancelled) setStatus('error')
-      }
+    // Already loaded earlier this session → reuse immediately, no spinner.
+    if (_model) {
+      sessRef.current = _model.session
+      setWords(_model.words)
+      setStatus('ready')
+      return
     }
-    load()
+    loadModel(pct => { if (!cancelled) setProgress(pct) })
+      .then(m => {
+        if (cancelled) return
+        sessRef.current = m.session
+        setWords(m.words)
+        setStatus('ready')
+      })
+      .catch(() => { if (!cancelled) setStatus('error') })
     return () => { cancelled = true }
   }, [])
 

@@ -17,6 +17,13 @@ export default function Architecture() {
         change. The class is called <code>HangmanPolicy</code>.
       </p>
 
+      <Callout type="note" title="Why an encoder (not a decoder)">
+        A decoder generates text left-to-right, one token at a time. Here there’s nothing to
+        generate — the entire board is visible up front, and we just need to score 26 letters. An
+        encoder reads the whole pattern at once and lets every position inform every other, which is
+        exactly what’s needed to reason about which letters fit the gaps.
+      </Callout>
+
       <h2>The forward pass at a glance</h2>
       <Diagram>{`graph TD
     T["token_ids · 45<br/>masked word"] --> TE["Token<br/>embedding"]
@@ -65,6 +72,17 @@ h = self.encoder(x, src_key_padding_mask=~attn_mask.bool()) # [B, 45, d]`}</Code
         <strong>GELU</strong> activations. Pre-norm keeps gradients stable as the model gets wider
         and deeper.
       </p>
+
+      <Callout type="tip" title="What self-attention does here, in plain terms">
+        For the board <code>_ r e _ _</code>, the first blank doesn’t decide in isolation — it{' '}
+        <em>looks at</em> the other positions and weighs how much each one constrains it. Seeing{' '}
+        <code>r</code> and <code>e</code> next to it makes letters like <code>p</code> (“pre…”) or{' '}
+        <code>t</code> (“tre…”) far more likely than, say, <code>q</code>. Self-attention is exactly
+        this: every position gathers information from every other and updates its own
+        representation. “Multi-head” just runs several of these comparisons in parallel, each free to
+        focus on a different kind of relationship (adjacent letters, vowel/consonant patterns, word
+        endings).
+      </Callout>
 
       <CodeBlock language="python">{`# pre-norm block (norm_first=True)
 x = x + Attention(LayerNorm(x))
@@ -118,12 +136,10 @@ def predict_letter(self, token_ids, attn_mask, guessed_vec):
         ]}
       />
 
-      <h2>Multi-label loss, not softmax</h2>
       <p>
-        A word like <code>apple</code> contains <code>a, p, l, e</code> simultaneously, so the
-        output is treated as 26 independent yes/no questions — <strong>binary cross-entropy</strong>{' '}
-        per letter — not a single softmax choice. Loss is only computed on letters not yet
-        guessed.
+        The 26 logits are treated as 26 <em>independent</em> yes/no predictions (a word has several
+        letters at once), so training uses multi-label binary cross-entropy rather than a softmax —
+        the full details are on the <Link to="/docs/training">Training</Link> page.
       </p>
 
       <h2>Parameter count &amp; the scaling law</h2>

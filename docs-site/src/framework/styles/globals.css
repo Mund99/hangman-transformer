@@ -257,10 +257,15 @@ body {
 .theme-toggle:hover { background: var(--header-btn-hover); color: var(--header-text); }
 
 .mobile-btn {
-  background: none; border: none;
+  background: none; border: none; cursor: pointer;
   color: var(--header-btn-clr);
-  cursor: pointer; font-size: 1.2rem;
-  display: none; padding: 0.25rem; line-height: 1;
+  display: none; align-items: center; justify-content: center;
+  padding: 0.3rem; border-radius: 7px; line-height: 1;
+  transition: background 0.12s var(--ease), color 0.12s var(--ease);
+}
+.mobile-btn:hover {
+  background: var(--header-btn-hover);
+  color: var(--header-text);
 }
 
 /* ── Sidebar ─────────────────────────────────────────────── */
@@ -274,7 +279,7 @@ body {
   display: flex;
   flex-direction: column;
 }
-.sidebar.collapsed { width: 40px; }
+.sidebar.collapsed { width: 0; border-right-color: transparent; }
 .sidebar-inner {
   overflow-y: auto;
   flex: 1;
@@ -286,31 +291,19 @@ body {
   pointer-events: none;
   overflow: hidden;
 }
-.sidebar-toggle {
-  position: absolute;
-  right: -12px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px; height: 24px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: 50%;
+/* desktop sidebar collapse button, lives in the header */
+.sidebar-collapse-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--header-btn-clr);
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  color: var(--text-3);
-  font-size: 0.9rem;
-  z-index: 10;
-  box-shadow: var(--shadow-xs);
-  transition: background 0.12s var(--ease), color 0.12s var(--ease), box-shadow 0.12s var(--ease);
-  line-height: 1;
-  flex-shrink: 0;
+  padding: 0.3rem; border-radius: 7px; line-height: 1;
+  transition: background 0.12s var(--ease), color 0.12s var(--ease);
 }
-.sidebar-toggle:hover {
-  background: var(--accent-bg);
-  color: var(--accent);
-  box-shadow: var(--shadow-sm);
+.sidebar-collapse-btn:hover {
+  background: var(--header-btn-hover);
+  color: var(--header-text);
 }
-[data-sidebar-collapsed] .progress { left: 40px; }
+[data-sidebar-collapsed] .progress { left: 0; }
 .nav-section { margin-bottom: 0.15rem; }
 .nav-section-hd {
   font-family: var(--font-head);
@@ -615,7 +608,7 @@ body {
   .sidebar { position: fixed; left: -100%; top: var(--header-h); height: calc(100vh - var(--header-h)); z-index: 100; transition: left 0.25s var(--ease); box-shadow: var(--shadow-md); width: var(--sidebar-w) !important; }
   .sidebar.open { left: 0; }
   .sidebar.collapsed .sidebar-inner { opacity: 1; pointer-events: auto; overflow-y: auto; }
-  .sidebar-toggle { display: none; }
+  .sidebar-collapse-btn { display: none; }
   .page { padding: 1.5rem 1.25rem 3rem; }
   .progress { left: 0 !important; }
   .header-search { display: none; }

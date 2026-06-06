@@ -35,9 +35,9 @@ export default function Data() {
       <h2>The corpus</h2>
       <p>
         <strong>353,046</strong> unique English words, sourced from NLTK (WordNet lemmas + the{' '}
-        <code>words</code> corpus) and a competition word list, then deduplicated, lowercased,
-        filtered to alphabetic words of <strong>length ≥ 4</strong>, and split <strong>90 / 5 / 5</strong>{' '}
-        into disjoint train / validation / test sets.
+        <code>words</code> corpus), then deduplicated, lowercased, filtered to alphabetic words of{' '}
+        <strong>length ≥ 4</strong>, and split <strong>90 / 5 / 5</strong> into disjoint
+        train / validation / test sets.
       </p>
 
       <DocTable
@@ -55,6 +55,31 @@ export default function Data() {
         test set is touched only once, for the final number. Because the model is graded on words
         it has never seen, it cannot memorise answers — it must generalise the statistics of
         English spelling.
+      </Callout>
+
+      <h3>Word-length distribution</h3>
+      <p>
+        Word length matters more than anything else in this project, so it’s worth seeing how the
+        corpus is shaped. Short words — the hardest to guess — are also the <em>rarest</em>:
+      </p>
+
+      <DocTable
+        headers={['Length', 'Train words', 'Share', '']}
+        rows={[
+          ['4–6 (short)', '48,906', '15.4%', 'Hardest to guess, smallest slice'],
+          ['7–9', '121,643', '38.3%', 'The bulk of the corpus'],
+          ['10–12', '98,586', '31.1%', 'Easy — lots of structure'],
+          ['13–15', '39,118', '12.3%', 'Very easy'],
+          ['16+', '9,241', '2.9%', 'Almost always solved'],
+        ]}
+      />
+
+      <Callout type="warning" title="This is why the curriculum exists">
+        Short words are both the <strong>hardest</strong> and the <strong>least frequent</strong>{' '}
+        (only 15.4% of training). Left alone, the model would barely see them. This is the exact
+        reason training oversamples short words 4× (see{' '}
+        <Link to="/docs/training">Training</Link>) — and why, despite that, short words remain the
+        model’s weak spot (<Link to="/docs/analysis">Performance Analysis</Link>).
       </Callout>
 
       <Callout type="note" title="Data cleaning barely mattered">

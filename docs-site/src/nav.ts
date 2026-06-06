@@ -23,6 +23,7 @@ export const NAV: NavItem[] = [
   {
     label: 'The Model',
     children: [
+      { label: 'Transformer Explained', path: '/docs/transformer' },
       { label: 'Architecture', path: '/docs/architecture' },
       { label: 'Training: Supervised & RL', path: '/docs/training' },
     ],

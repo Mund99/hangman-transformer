@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage'
 import Play from './pages/Play'
 import Data from './pages/docs/Data'
 import Baselines from './pages/docs/Baselines'
+import Transformer from './pages/docs/Transformer'
 import Architecture from './pages/docs/Architecture'
 import Training from './pages/docs/Training'
 import Analysis from './pages/docs/Analysis'
@@ -39,10 +40,31 @@ function ThemeToggle() {
   )
 }
 
-function Header({ onMenu }: { onMenu: () => void }) {
+function Header({ onMenu, onToggleSidebar, collapsed }: {
+  onMenu: () => void
+  onToggleSidebar: () => void
+  collapsed: boolean
+}) {
   return (
     <header className="header">
-      <button onClick={onMenu} className="mobile-btn" aria-label="Menu">☰</button>
+      <button onClick={onMenu} className="mobile-btn" aria-label="Menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <line x1="9" y1="4" x2="9" y2="20" />
+        </svg>
+      </button>
+
+      <button
+        onClick={onToggleSidebar}
+        className="sidebar-collapse-btn"
+        aria-label={collapsed ? 'Show sidebar' : 'Hide sidebar'}
+        title={collapsed ? 'Show sidebar' : 'Hide sidebar'}
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <line x1="9" y1="4" x2="9" y2="20" />
+        </svg>
+      </button>
 
       <span className="header-title">{siteConfig.title}</span>
 
@@ -69,9 +91,17 @@ function Header({ onMenu }: { onMenu: () => void }) {
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(
+    () => localStorage.getItem('sidebar-collapsed') === 'true'
+  )
   const [theme, setTheme] = useState<'light' | 'dark'>(() =>
     (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
   )
+
+  useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', String(collapsed))
+    document.documentElement.toggleAttribute('data-sidebar-collapsed', collapsed)
+  }, [collapsed])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -102,9 +132,13 @@ export default function App() {
   return (
     <ThemeContext.Provider value={{ theme, toggle: () => setTheme(t => t === 'light' ? 'dark' : 'light') }}>
       <div className="shell">
-        <Header onMenu={() => setSidebarOpen(o => !o)} />
+        <Header
+          onMenu={() => setSidebarOpen(o => !o)}
+          onToggleSidebar={() => setCollapsed(c => !c)}
+          collapsed={collapsed}
+        />
         <div className="shell-body">
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Sidebar isOpen={sidebarOpen} collapsed={collapsed} onClose={() => setSidebarOpen(false)} />
 
           {sidebarOpen && (
             <div
@@ -119,6 +153,7 @@ export default function App() {
             <Route path="/play" element={<Play />} />
             <Route path="/docs/data" element={<Data />} />
             <Route path="/docs/baselines" element={<Baselines />} />
+            <Route path="/docs/transformer" element={<Transformer />} />
             <Route path="/docs/architecture" element={<Architecture />} />
             <Route path="/docs/training" element={<Training />} />
             <Route path="/docs/analysis" element={<Analysis />} />

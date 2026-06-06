@@ -11,9 +11,11 @@ export default function Experiments() {
       </div>
 
       <p>
-        This is the full record of what was tried, in order, with the result and the reasoning
-        behind each. The headline is simple: <strong>architecture scaling worked, everything
-        else failed</strong> — and the failures are the interesting part.
+        <Link to="/docs/analysis">Performance Analysis</Link> showed <em>how good</em> the final
+        model is; this page is <em>how we got there</em> — the full record of what was tried, in
+        order, with the result and the reasoning behind each. The headline is simple:{' '}
+        <strong>architecture scaling worked, everything else failed</strong> — and the failures are
+        the interesting part.
       </p>
 
       <Callout type="quote" title="How the experiments were run">
@@ -80,11 +82,12 @@ export default function Experiments() {
       <DocTable
         headers={['Search', 'Algorithm', 'Result']}
         rows={[
-          ['rl_search1', 'PPO', 'Degraded immediately'],
-          ['rl_search2–3', 'KL-PPO (kl 0.01, 0.05)', 'Plateaued at baseline'],
-          ['rl_search4', 'KL-PPO (kl 0.10)', '66.22% — best RL, still ≤ supervised'],
-          ['rl_search5', 'KL-PPO (kl 1.0)', '66.19%'],
-          ['rl_search6', 'GRPO', 'Collapsed'],
+          ['rl_search1', 'PPO — shaped reward', 'Degraded immediately'],
+          ['rl_search2', 'PPO — terminal reward', 'Sparse reward → no gradient signal'],
+          ['rl_search3', 'PPO — shaped, fixed config', 'Stuck at the 58–59% floor'],
+          ['rl_search4', 'GRPO', 'Stuck at the 58–59% floor'],
+          ['rl_search5', 'KL-PPO (RLHF-style)', '66.22% — best RL, still ≤ supervised'],
+          ['rl_search6', 'KL-PPO — stronger KL', '66.19% — never beat supervised'],
         ]}
       />
 

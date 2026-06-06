@@ -13,7 +13,7 @@ export default function HomePage() {
 
       <p>
         A character-level Transformer trained to play Hangman on words it has never seen.
-        After 20+ experiments — supervised scaling, six reinforcement-learning attempts,
+        After 20+ experiments — supervised scaling, reinforcement-learning attempts,
         curriculum tuning, inference-time search, and model specialisation — the best model
         reaches a <strong>69.02% win rate</strong> on 17,652 held-out test words.
       </p>
@@ -39,7 +39,7 @@ export default function HomePage() {
       </p>
 
       <p>
-        For context, two non-neural <Link to="/docs/data-baselines">statistical baselines</Link>{' '}
+        For context, two non-neural <Link to="/docs/baselines">statistical baselines</Link>{' '}
         set the bar the model has to clear:
       </p>
 
@@ -54,8 +54,9 @@ export default function HomePage() {
       />
 
       <p>
-        The baselines, the data pipeline, and the runnable code are on the{' '}
-        <Link to="/docs/data-baselines">Data &amp; Baselines</Link> page.
+        See the <Link to="/docs/data">data pipeline</Link> and the{' '}
+        <Link to="/docs/baselines">statistical baselines</Link> (with runnable code) for the full
+        picture.
       </p>
 
       <h2>How it works</h2>
@@ -84,7 +85,7 @@ export default function HomePage() {
           ['d=256', '3.25M', '66.20%', 'baseline'],
           ['d=384', '10.8M', '68.24%', '+2.04pp'],
           ['d=512', '19.2M', '68.79%', '+0.55pp'],
-          ['d=768  ★ best', '43.2M', '69.02%', '+0.23pp'],
+          ['d=768 ★ best', '43.2M', '69.02%', '+0.23pp'],
           ['d=1024', '76.8M', '67.69%', '−1.10pp — corpus too small'],
         ]}
       />
@@ -113,6 +114,7 @@ export default function HomePage() {
         rows={[
           ['Foundations', 'The Problem & Data', 'Game rules, the 90/5/5 corpus, how a board becomes training data'],
           ['Foundations', 'Statistical Baselines', 'Two rule-based agents (18% & 39%) that set the bar'],
+          ['The Model', 'Transformer Explained', 'A plain-language primer on self-attention (no math)'],
           ['The Model', 'Architecture', 'The Transformer, encoding, inference, and the scaling law'],
           ['The Model', 'Training: Supervised & RL', 'How it’s trained — and exactly why 6 RL attempts failed'],
           ['Results', 'Performance Analysis', 'The best model by word length and by letter'],
@@ -123,18 +125,27 @@ export default function HomePage() {
         ]}
       />
 
-      <Callout type="tip" title="Short on time?">
-        Read the <Link to="/docs/experiments">Experiments &amp; Findings</Link> page and try{' '}
-        <Link to="/play">Play</Link> — together they tell the whole story: what worked, what
-        didn’t, and how it feels.
+      <Callout type="tip" title="New to this? Start here">
+        For the gentlest path, read in this order:{' '}
+        <Link to="/docs/transformer">Transformer Explained</Link> (no-math primer) →{' '}
+        <Link to="/docs/data">The Problem &amp; Data</Link> (what the game and data are) →{' '}
+        <Link to="/play">Play</Link> (watch it run). Then come back for the rest.
+      </Callout>
+
+      <Callout type="note" title="Already know ML? The quick tour">
+        The <Link to="/docs/experiments">Experiments &amp; Findings</Link> page plus{' '}
+        <Link to="/play">Play</Link> tell the whole story fast: what worked, what didn’t, and how
+        it feels.
       </Callout>
 
       <Callout type="note" title="What’s in the repo">
         The{' '}
         <a href="https://github.com/Mund99/hangman-transformer" target="_blank" rel="noreferrer">GitHub repo</a>{' '}
-        ships the data splits and the runnable statistical baselines; the training pipeline is
-        documented under <Link to="/docs/pipeline">Reference</Link>. The in-browser demo runs an
-        int8-quantised export of the d=512 model (18.8 MB — identical win rate to full precision).
+        contains the full training code (<code>hangman/</code>, <code>scripts/</code>), every
+        experiment’s run config, the data splits, runnable statistical baselines, and curated
+        result logs. The in-browser demo runs an int8-quantised <strong>d=512</strong> model
+        (18.8 MB) for a fast download — quantization is lossless, and it’s within ~0.2pp of the
+        best d=768 model.
       </Callout>
     </DocLayout>
   )

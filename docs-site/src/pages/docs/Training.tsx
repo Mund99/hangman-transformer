@@ -46,6 +46,29 @@ optimizer.step()   # AdamW, cosine LR with warmup`}</CodeBlock>
         ]}
       />
 
+      <h3>Key hyperparameters</h3>
+      <p>The exact settings for the best run (d=768); learning rate is scaled down as the model widens.</p>
+      <DocTable
+        headers={['Hyperparameter', 'Value']}
+        rows={[
+          ['Optimizer', 'AdamW, weight decay 0.01'],
+          ['Learning rate', '7e-5 (d=768) → 1e-4 (d=512), cosine decay'],
+          ['Warmup', '2,000 steps'],
+          ['Training steps', '200,000'],
+          ['Batch size', '512'],
+          ['Curriculum weights', '4× (len 4–6), 2× (len 7–9), 1× (len 10+)'],
+          ['Gradient clipping', 'max-norm 1.0'],
+          ['Validation', 'every 5,000 steps on a 5,000-word subset'],
+        ]}
+      />
+
+      <Callout type="note" title="How long it trains">
+        Validation win rate climbs fast early, then flattens — the best d=768 checkpoint landed
+        around step 200k. Training longer or with a lower LR didn’t help; the model had absorbed
+        what the corpus could teach. Progress is judged purely by validation win rate, never by the
+        BCE loss (which keeps drifting down well after wins plateau).
+      </Callout>
+
       <h3>The target and the loss mask</h3>
       <p>
         For each board, two 26-dim vectors are built. The <strong>target</strong> marks every
@@ -90,11 +113,12 @@ loss_mask = [0 if letter in guessed     else 1 for letter in "a..z"] # a,l,s   -
       <DocTable
         headers={['Search', 'Algorithm', 'Result']}
         rows={[
-          ['rl_search1', 'PPO', 'Degraded immediately'],
-          ['rl_search2–3', 'KL-PPO (kl 0.01, 0.05)', 'Plateaued at baseline'],
-          ['rl_search4', 'KL-PPO (kl 0.10)', '66.22% — best RL, still ≤ supervised'],
-          ['rl_search5', 'KL-PPO (kl 1.0)', '66.19%'],
-          ['rl_search6', 'GRPO', 'Collapsed'],
+          ['rl_search1', 'PPO — shaped reward', 'Degraded immediately'],
+          ['rl_search2', 'PPO — terminal reward', 'Sparse reward → no gradient signal'],
+          ['rl_search3', 'PPO — shaped, fixed config', 'Stuck at the 58–59% floor'],
+          ['rl_search4', 'GRPO', 'Stuck at the 58–59% floor'],
+          ['rl_search5', 'KL-PPO (RLHF-style)', '66.22% — best RL, still ≤ supervised'],
+          ['rl_search6', 'KL-PPO — stronger KL', '66.19% — never beat supervised'],
         ]}
       />
 
@@ -147,9 +171,13 @@ loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</Code
         <Link to="/docs/architecture">scaling experiments</Link> confirmed.
       </p>
 
+      <h3>Next: how well does the trained model actually play?</h3>
       <p>
-        The full run-by-run record is on the{' '}
-        <Link to="/docs/experiments">Experiments &amp; Findings</Link> page.
+        With supervised training as the engine and scaling as the lever, the best configuration was
+        d=768. The <Link to="/docs/analysis">Performance Analysis</Link> page breaks that model down
+        by word length and by letter — where it’s near-perfect and where it struggles. For the full
+        run-by-run journey that led there, see{' '}
+        <Link to="/docs/experiments">Experiments &amp; Findings</Link>.
       </p>
     </DocLayout>
   )
