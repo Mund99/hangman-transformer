@@ -36,9 +36,12 @@ hangman/        Core package — model, dataset, env, vocab, eval
 scripts/        Training (train_supervised.py, train_rl.py) + evaluation + run_*.sh configs
 baselines/      Standalone statistical baselines (numpy only)
 data/           Word lists — 90/5/5 train / val / test split
-results/        Curated result logs (summary + per-model test evals)
+results/        Curated result logs (summary + per-model test evals) — see results/README.md
 docs-site/      The documentation site (React + Vite, deployed to GitHub Pages)
 ```
+
+> Navigation: [`scripts/README.md`](scripts/README.md) indexes the experiment runs;
+> [`results/README.md`](results/README.md) maps each run to its result.
 
 ---
 
@@ -61,8 +64,9 @@ python scripts/train_supervised.py \
 python scripts/evaluate.py --ckpt logs/d768/supervised_best.pt --words data/test_words.txt
 ```
 
-The exact configuration for every experiment in the paper is in the `scripts/run_*.sh`
-files (e.g. `run_sup_search8.sh` reproduces the d=768 / d=1024 scaling runs).
+The exact configuration for every experiment is in the `scripts/run_*.sh` files
+(e.g. `run_sup_search8.sh` reproduces the d=768 / d=1024 scaling runs) — see
+[`scripts/README.md`](scripts/README.md) for an index of all 16 runs.
 
 ---
 
@@ -82,3 +86,18 @@ mid-game board states. Full details in the
 The full write-up — problem, data, baselines, architecture, training, the experiment log,
 and per-length / per-letter analysis — lives at
 **https://mund99.github.io/hangman-transformer/**, built from `docs-site/`.
+
+---
+
+## Data &amp; acknowledgements
+
+The word lists in `data/` are derived from the [NLTK](https://www.nltk.org/) WordNet lemmas
+and `words` corpus (deduplicated, lowercased, length ≥ 4). The in-browser demo is powered by
+[ONNX Runtime Web](https://onnxruntime.ai/); the documentation site is built with
+[doccraft](https://github.com/Mund99/doccraft).
+
+---
+
+## License
+
+[MIT](LICENSE) © Mund99
