@@ -16,7 +16,7 @@ Architecture
 The guessed-letter vector is projected to d_model and broadcast-added to
 every token embedding so the encoder attends to it from all positions.
 After encoding we pool with masked mean and pass through a small MLP head.
-Total params with default config: ~1.3M — trains fast on Apple Silicon MPS.
+Total params with default config: ~824K — trains fast on Apple Silicon MPS.
 """
 from __future__ import annotations
 

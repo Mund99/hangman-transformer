@@ -144,7 +144,7 @@ export default function HomePage() {
         contains the full training code (<code>hangman/</code>, <code>scripts/</code>), every
         experiment’s run config, the data splits, runnable statistical baselines, and curated
         result logs. The in-browser demo runs an int8-quantised <strong>d=512</strong> model
-        (18.8 MB) for a fast download — quantization is lossless, and it’s within ~0.2pp of the
+        (18.8 MB) for a fast download — the quantization barely affects accuracy — within ~0.2pp of the
         best d=768 model.
       </Callout>
     </DocLayout>
