@@ -24,7 +24,7 @@ export default function HomePage() {
       </p>
 
       <Callout type="tip" title="The short version">
-        Supervised scaling was the only lever that reliably worked. Every other idea — RL,
+        Supervised scaling was the only lever that helped at all. Every other idea — RL,
         aggressive curriculum, candidate-pool search, a dedicated short-word model — either
         failed or regressed. The most valuable findings here are the <strong>negative</strong> ones,
         and <em>why</em> they failed.
@@ -74,9 +74,9 @@ export default function HomePage() {
 
       <h2>The result that mattered: scaling</h2>
       <p>
-        Model capacity (<code>d_model</code>) was the single reliable lever. Gains are
-        logarithmic and peak at d=768 — beyond that, the 317k-word corpus can no longer support
-        the parameters and performance regresses.
+        Model capacity (<code>d_model</code>) was the single lever that helped, with strongly
+        diminishing returns that plateau at d=768. Performance dropped at d=1024 — whether from
+        a data ceiling or under-training at the fixed budget, more width stopped helping.
       </p>
 
       <DocTable
@@ -86,7 +86,7 @@ export default function HomePage() {
           ['d=384', '10.8M', '68.24%', '+2.04pp'],
           ['d=512', '19.2M', '68.79%', '+0.55pp'],
           ['d=768 ★ best', '43.2M', '69.02%', '+0.23pp'],
-          ['d=1024', '76.8M', '67.69%', '−1.10pp — corpus too small'],
+          ['d=1024', '76.8M', '67.69%', '−1.10pp — stopped improving'],
         ]}
       />
 

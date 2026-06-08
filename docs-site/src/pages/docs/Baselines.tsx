@@ -32,6 +32,16 @@ export default function Baselines() {
         — runnable with just <code>numpy</code>.
       </p>
 
+      <Callout type="note" title="Why these numbers look so weak">
+        In standard Hangman the answer word is always <em>in</em> the reference dictionary,
+        so a Bayesian filter-and-rank agent can reach 90%+. Here the test set is deliberately
+        held out — neither the model nor the baselines ever see the test words during training
+        or dictionary construction. That tests generalisation, not memorisation, and it makes
+        dictionary-filter strategies collapse on unfamiliar words. The 18% and 39% figures are
+        correct for this harder OOV variant — not a sign that classical methods are universally
+        weak at Hangman.
+      </Callout>
+
       <h2>1 · CandidateFrequency</h2>
       <p>
         Filter the training dictionary to words that still match the current masked pattern (and

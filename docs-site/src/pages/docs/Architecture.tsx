@@ -144,9 +144,11 @@ def predict_letter(self, token_ids, attn_mask, guessed_vec):
 
       <h2>Parameter count &amp; the scaling law</h2>
       <p>
-        Capacity is the one lever that reliably improved results. Each doubling of width bought
-        roughly half the previous gain — a clean logarithmic curve that <em>peaks at d=768</em>{' '}
-        and then reverses, because the 317k-word corpus can’t support more parameters.
+        Capacity improved results — with strongly diminishing returns that plateau around d=768.
+        Each configuration was a single training run, so the fine-grained ordering of d=512 vs
+        d=768 (+0.23pp) is within single-run sampling noise; the plateau is real but not a clean
+        logarithmic law. Note that the d=256 baseline also differed in depth (L=4 vs L=6 for all
+        others) and training data, so the first +2pp jump reflects more than width alone.
       </p>
 
       <DocTable
@@ -166,10 +168,11 @@ def predict_letter(self, token_ids, attn_mask, guessed_vec):
     C --> D["d=768 ★<br/>69.0%"]
     D --> E["d=1024<br/>67.7% ▼"]`}</Diagram>
 
-      <Callout type="warning" title="The corpus is the ceiling, not the architecture">
-        At d=1024 (76.8M params) the model regressed 1.10pp. Beyond d=768 there simply isn’t
-        enough training signal per parameter. Pushing past this point would need a much larger
-        corpus, not a bigger model.
+      <Callout type="warning" title="Scaling saturated by d=768">
+        At d=1024 (76.8M params) results dropped 1.10pp — and validation fell too (68.96% vs
+        70.52% at d=768), which suggests the larger model may have been under-trained at the
+        same fixed budget rather than hitting a proven data ceiling. Either way, more capacity
+        stopped helping by d=768.
       </Callout>
 
       <p>

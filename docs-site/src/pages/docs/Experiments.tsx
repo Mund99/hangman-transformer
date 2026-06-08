@@ -42,7 +42,7 @@ export default function Experiments() {
           ['🥇', 'sup8_a — d=768', '69.02%', '43.2M', 'Best overall'],
           ['🥈', 'sup5_b — d=512', '68.79%', '19.2M', 'Powers the in-browser demo'],
           ['🥉', 'sup5_a — d=384', '68.24%', '10.8M', ''],
-          ['4', 'sup8_b — d=1024', '67.69%', '76.8M', 'Regression — corpus too small'],
+          ['4', 'sup8_b — d=1024', '67.69%', '76.8M', 'Regression — scaling saturated'],
           ['5', 'ft_b — d=256', '66.32%', '3.25M', 'Rare-letter reweighting'],
           ['6', 'rl5_b — KL-PPO', '66.22%', '3.25M', 'Best RL run — still below supervised'],
         ]}
@@ -50,9 +50,10 @@ export default function Experiments() {
 
       <h2>1 · Architecture scaling — the one thing that worked</h2>
       <p>
-        Holding everything else fixed and varying only model width revealed a clean logarithmic
-        scaling law. Each doubling of capacity bought roughly half the previous gain — until
-        d=1024, where the model regressed.
+        Holding everything else fixed and varying only model width showed strongly diminishing
+        returns that plateau around d=768. Each point is a single training run — the fine-grained
+        ordering of d=512/768 (+0.23pp) is within single-run sampling noise. The plateau is the
+        reliable observation.
       </p>
 
       <DocTable
@@ -66,10 +67,11 @@ export default function Experiments() {
         ]}
       />
 
-      <Callout type="info" title="Finding 1 + 8 — capacity helps until the data runs out">
-        d=768 is the sweet spot. At d=1024 (76.8M params) the model regressed by 1.10pp: 317k
-        words simply cannot support that many parameters. The corpus, not the architecture, is
-        now the ceiling.
+      <Callout type="info" title="Finding 1 + 8 — scaling saturates by d=768">
+        Results plateau at d=768. At d=1024 performance dropped 1.10pp — and validation fell too,
+        suggesting the larger model may have been under-trained at the fixed budget rather than
+        hitting a proven data ceiling. The practical conclusion holds either way: more width
+        stopped helping here.
       </Callout>
 
       <h2>2 · Reinforcement learning — six failures</h2>
@@ -217,7 +219,7 @@ export default function Experiments() {
       </Callout>
 
       <p>
-        See the model and the scaling law up close on the{' '}
+        See the model and the scaling results up close on the{' '}
         <Link to="/">Overview</Link>, or <Link to="/play">watch it play</Link>.
       </p>
     </DocLayout>

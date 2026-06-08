@@ -155,11 +155,14 @@ loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</Code
       </Callout>
 
       <Callout type="danger" title="Why RL can’t help here: it’s a knowledge task">
-        Underneath every mechanism is one fact: optimal Hangman play is about{' '}
-        <em>knowing English letter statistics</em>, which supervised learning already captures
-        directly. There’s no strategic layer left for RL to discover. The KL penalty that kept
-        training stable also kept it from changing anything useful; remove it and the model forgets
-        its knowledge and degrades. The real lever was never the RL algorithm — it was{' '}
+        Underneath every mechanism is one fact: Hangman play is overwhelmingly about{‘ ‘}
+        <em>knowing English letter statistics</em>, which supervised learning captures
+        directly. Six RL variants — each fixing the previous one’s flaw — found no improvement
+        on the supervised baseline. Whether a life-aware, information-maximising policy could
+        theoretically do better is an open question; empirically, RL could not find it from this
+        starting point. The KL penalty that kept training stable also kept it from changing
+        anything useful; remove it and the model forgets its knowledge and degrades. The real
+        lever was never the RL algorithm — it was{‘ ‘}
         <Link to="/docs/architecture">model capacity</Link>.
       </Callout>
 

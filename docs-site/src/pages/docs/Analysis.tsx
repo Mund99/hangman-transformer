@@ -127,15 +127,18 @@ export default function Analysis() {
         headers={['', 'Win rate']}
         rows={[
           ['Best model (d=768)', '69.02%'],
-          ['Estimated perfect play', '~75–80%'],
+          ['Estimated perfect play (informal)', '~75–80%'],
           ['Gap', 'Short words + unguessable tail'],
         ]}
       />
 
       <Callout type="tip" title="What would move the needle">
-        Not a bigger model — d=1024 already regressed. The remaining gap is bounded by the corpus
-        and by information theory. Real gains would require a much larger training vocabulary, or a
-        fundamentally different prior (e.g. an LLM that already knows English morphology).
+        Not a bigger model — d=1024 already regressed, and its validation also dropped (68.96% vs
+        70.52% at d=768), suggesting under-training at the fixed budget rather than a proven data
+        ceiling. Either way, more capacity stopped helping. The remaining gap is bounded by the
+        corpus and by information theory. Real gains would require a much larger training
+        vocabulary, or a fundamentally different prior (e.g. an LLM that already knows English
+        morphology).
       </Callout>
 
       <p>

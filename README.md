@@ -23,7 +23,7 @@ The in-browser demo runs the model client-side via ONNX Runtime — no server.
 | **d=768 Transformer (best)** | **43.2M** | **69.02%** |
 | d=1024 Transformer | 76.8M | 67.69% (regressed) |
 
-The headline finding: **architecture scaling was the only reliable lever.** RL, aggressive
+The headline finding: **architecture scaling was the only lever that helped — and even that saturates by ~d=768.** RL, aggressive
 curriculum, inference-time search, and a dedicated short-word model all failed or regressed.
 The reasoning behind every run is in the [documentation](https://mund99.github.io/hangman-transformer/docs/experiments).
 
