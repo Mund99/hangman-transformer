@@ -14,7 +14,7 @@ export default function Training() {
         The project name says “RL,” but the honest finding is that{' '}
         <strong>supervised learning did all the work</strong> and reinforcement learning never
         improved on it. This page covers both — the method that succeeded and the one that
-        didn’t, with the reason why.
+        didn't, with the reason why.
       </p>
 
       <Diagram>{`graph LR
@@ -64,7 +64,7 @@ optimizer.step()   # AdamW, cosine LR with warmup`}</CodeBlock>
 
       <Callout type="note" title="How long it trains">
         Validation win rate climbs fast early, then flattens — the best d=768 checkpoint landed
-        around step 200k. Training longer or with a lower LR didn’t help; the model had absorbed
+        around step 200k. Training longer or with a lower LR didn't help; the model had absorbed
         what the corpus could teach. Progress is judged purely by validation win rate, never by the
         BCE loss (which keeps drifting down well after wins plateau).
       </Callout>
@@ -90,7 +90,7 @@ loss_mask = [0 if letter in guessed     else 1 for letter in "a..z"] # a,l,s   -
       </Callout>
 
       <Callout type="tip" title="The length curriculum">
-        Short words (4–6 letters) are rare and hard, so they’re oversampled 4× (medium 2×) during
+        Short words (4–6 letters) are rare and hard, so they're oversampled 4× (medium 2×) during
         training. This 4×/2× ratio is a genuine sweet spot: weaker, and short words are
         undertrained; stronger (e.g. 16×/4×), and long words starve — a −3pp regression. See{' '}
         <Link to="/docs/experiments">Experiments</Link>.
@@ -132,7 +132,7 @@ loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</Code
 
       <h3>How, exactly, each search failed</h3>
       <p>
-        The failures weren’t random — each search fixed the previous one’s flaw and hit a new
+        The failures weren't random — each search fixed the previous one's flaw and hit a new
         wall, all bottoming out at the same 58–59% floor (on the d=256 model).
       </p>
 
@@ -154,21 +154,21 @@ loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</Code
         not better. RL optimised the policy in the wrong direction while the loss happily fell.
       </Callout>
 
-      <Callout type="danger" title="Why RL can’t help here: it’s a knowledge task">
-        Underneath every mechanism is one fact: Hangman play is overwhelmingly about{‘ ‘}
+      <Callout type="danger" title="Why RL can't help here: it's a knowledge task">
+        Underneath every mechanism is one fact: Hangman play is overwhelmingly about{' '}
         <em>knowing English letter statistics</em>, which supervised learning captures
-        directly. Six RL variants — each fixing the previous one’s flaw — found no improvement
+        directly. Six RL variants — each fixing the previous one's flaw — found no improvement
         on the supervised baseline. Whether a life-aware, information-maximising policy could
         theoretically do better is an open question; empirically, RL could not find it from this
         starting point. The KL penalty that kept training stable also kept it from changing
         anything useful; remove it and the model forgets its knowledge and degrades. The real
-        lever was never the RL algorithm — it was{‘ ‘}
+        lever was never the RL algorithm — it was{' '}
         <Link to="/docs/architecture">model capacity</Link>.
       </Callout>
 
       <h3>The takeaway</h3>
       <p>
-        When RL refuses to improve on a supervised model, it’s often a signal that the model
+        When RL refuses to improve on a supervised model, it's often a signal that the model
         already has the right inductive bias and the task has little hidden strategy. The right
         next move was more capacity, not a better RL algorithm — which is exactly what the{' '}
         <Link to="/docs/architecture">scaling experiments</Link> confirmed.
@@ -178,7 +178,7 @@ loss = ppo_clip(ratio, advantage) + kl_coef * KL(pi_rl || pi_supervised)`}</Code
       <p>
         With supervised training as the engine and scaling as the lever, the best configuration was
         d=768. The <Link to="/docs/analysis">Performance Analysis</Link> page breaks that model down
-        by word length and by letter — where it’s near-perfect and where it struggles. For the full
+        by word length and by letter — where it's near-perfect and where it struggles. For the full
         run-by-run journey that led there, see{' '}
         <Link to="/docs/experiments">Experiments &amp; Findings</Link>.
       </p>
